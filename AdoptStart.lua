@@ -7,6 +7,8 @@ function button_click (button_obj)
         for _,connection in pairs(getconnections(button_obj[v])) do
             pcall(function ()
                 connection:Fire()
+                task.wait(0.1)
+                connection:Fire()
             end)
         end
     end
