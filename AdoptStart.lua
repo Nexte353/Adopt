@@ -16,3 +16,8 @@ end
 
 local PlayButton = game:GetService("Players").LocalPlayer.PlayerGui.NewsApp.EnclosingFrame.MainFrame.Contents.PlayButton
 button_click(PlayButton)
+
+task.wait(10)
+
+local CloseDailyButton = game:GetService("Players").LocalPlayer.PlayerGui.DailyLoginApp.Frame.Body.Buttons.ClaimButton
+button_click(CloseDailyButton)
