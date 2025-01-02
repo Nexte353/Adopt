@@ -1,0 +1,305 @@
+local function rename(remotename,hashedremote)
+    hashedremote.Name = remotename
+end
+
+table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init, 7),rename)
+
+local clientData = require(game.ReplicatedStorage.ClientModules.Core.ClientData)
+local playerData = clientData.get_data()[tostring(game.Players.LocalPlayer)]
+function EquipLastPet_TeamBabies()
+    for num, i in playerData do
+        if num == 'last_equipped_pets' then
+            for num2, i2 in i do
+                _G.Pet = i2
+                local args = {
+                    [1] = i2,
+                    [2] = {
+                        ["use_sound_delay"] = false,
+                        ["equip_as_last"] = false
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("ToolAPI/Equip"):InvokeServer(unpack(args))
+                break
+            end
+        end
+        if num == 'team' then
+            if i == 'Parents' then
+                local args = {
+                    [1] = "Babies",
+                    [2] = {
+                        ["dont_send_back_home"] = true,
+                        ["source_for_logging"] = "avatar_editor"
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("TeamAPI/ChooseTeam"):InvokeServer(unpack(args))            
+            end
+        end
+    end
+end
+EquipLastPet_TeamBabies()
+task.wait(3)
+function TeleportToPlatform()
+    if not workspace:FindFirstChild('StartPlatform') then
+        local HRP = game.Players.LocalPlayer.character.HumanoidRootPart
+        local Part = Instance.new('Part')
+        Part.Name = 'StartPlatform'
+        Part.Anchored = true
+        Part.Parent = workspace
+        Part.Size = Vector3.new(500, 500, 10)
+        Part.Position = Vector3.new(-607.01318359375, 70, -1469.9130859375)
+        Part.Rotation = Vector3.new(90, 0, 0)
+        task.wait(1)
+        HRP.CFrame = Part.CFrame + Vector3.new(0, 20, 0)
+    else
+        local StartPlatform = workspace:FindFirstChild('StartPlatform')
+        local HRP = game.Players.LocalPlayer.character.HumanoidRootPart
+        HRP.CFrame = StartPlatform.CFrame + Vector3.new(0, 20, 0)
+    end
+end
+TeleportToPlatform()
+
+for num, i in playerData do
+    if string.find(num, 'pet') then
+        for num2, i2 in i do
+            if type(i2) == 'table' and num2 == 1 then
+                for num3, i3 in i2 do
+                    if num3 == 'char' then
+                        print(i3)
+                        _G.PetKind = i3
+                        break
+                    end
+                end
+            end
+        end
+    end
+end
+task.wait(3)
+local HouseFurniture = workspace.HouseInteriors.furniture:GetChildren()
+while wait(1) do
+    for num, i in playerData do
+        if num == 'ailments_manager' then
+            for num_2, i_2 in i do
+                if num_2 == 'ailments' then
+                    for num_3, i_3 in i_2 do
+                        for num_pets, i_pets in i_3 do
+                            if num_pets == 'dirty' then 
+                                print('dirty')
+                                EquipLastPet_TeamBabies()
+                                for num, i in HouseFurniture do
+                                    if i:FindFirstChild('ModernShower') then
+                                        local OriginStr = i.Name
+                                        IDfurniture = string.gsub(OriginStr, game.Players.LocalPlayer.Name..'/1/nil/true/', "")
+                                    end
+                                end
+                                print(IDfurniture)
+                                task.wait(1)
+                                local args = {
+                                    [1] = game:GetService("Players").LocalPlayer,
+                                    [2] = IDfurniture,
+                                    [3] = "UseBlock",
+                                    [4] = {
+                                        ["cframe"] = CFrame.new(-15961.55078125, 4002.459716796875, -8003.5517578125, 0, 0, 1, 0, 1, 0, -1, 0, 0)
+                                    },
+                                    [5] = game.workspace:WaitForChild("Pets"):GetChildren()[1] or game.workspace:WaitForChild("Pets"):FindFirstChild(_G.PetKind)
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/ActivateFurniture"):InvokeServer(unpack(args))
+                                task.wait(10)
+                            elseif num_pets == 'sleepy' then
+                                EquipLastPet_TeamBabies()
+                                for num, i in HouseFurniture do
+                                    if i:FindFirstChild('BasicCrib') then
+                                        local OriginStr = i.Name
+                                        IDfurniture = string.gsub(OriginStr, game.Players.LocalPlayer.Name..'/1/nil/true/', "")
+                                    end
+                                end
+                                task.wait(1)
+                                local args = {
+                                    [1] = game:GetService("Players").LocalPlayer,
+                                    [2] = IDfurniture,
+                                    [3] = "UseBlock",
+                                    [4] = {
+                                        ["cframe"] = CFrame.new(-15980.4658203125, 4000.9453125, -8030.02783203125, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+                                    },
+                                    [5] = game.workspace:WaitForChild("Pets"):GetChildren()[1] or game.workspace:WaitForChild("Pets"):FindFirstChild(_G.PetKind)
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/ActivateFurniture"):InvokeServer(unpack(args))
+                                task.wait(20)
+                            elseif num_pets == 'play' then
+                                EquipLastPet_TeamBabies()
+                                for num, i in playerData.inventory.toys do
+                                    if i.kind == 'squeaky_bone_default' then
+                                        _G.Bone = num
+                                    end
+                                end
+                                task.wait(1)
+                                for i = 1, 3 do
+                                    local args = {
+                                        [1] = "__Enum_PetObjectCreatorType_1",
+                                        [2] = {
+                                            ["reaction_name"] = "ThrowToyReaction",
+                                            ["unique_id"] = _G.Bone
+                                        }
+                                    }
+                                    
+                                    game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("PetObjectAPI/CreatePetObject"):InvokeServer(unpack(args))
+                                    task.wait(5)
+                                end
+                            elseif num_pets == 'toilet' then
+                                EquipLastPet_TeamBabies()
+                                for num, i in HouseFurniture do
+                                    if i:FindFirstChild('Toilet') then
+                                        local OriginStr = i.Name
+                                        IDfurniture = string.gsub(OriginStr, game.Players.LocalPlayer.Name..'/1/nil/true/', "")
+                                    end
+                                end
+                                print(IDfurniture)
+                                task.wait(1)
+                                local args = {
+                                    [1] = game:GetService("Players").LocalPlayer,
+                                    [2] = IDfurniture,
+                                    [3] = "Seat1",
+                                    [4] = {
+                                        ["cframe"] = CFrame.new(-3961.648193359375, 4003.1552734375, 3987.500244140625, 0, 0, 1, 0, 1, 0, -1, 0, 0)
+                                    },
+                                    [5] = game.workspace:WaitForChild("Pets"):GetChildren()[1] or game.workspace:WaitForChild("Pets"):FindFirstChild(_G.PetKind)
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/ActivateFurniture"):InvokeServer(unpack(args))
+                                task.wait(10)
+                            elseif num_pets == 'hungry' then
+                                EquipLastPet_TeamBabies()
+                                local args = {
+                                    [1] = "food",
+                                    [2] = "apple",
+                                    [3] = {
+                                        ["buy_count"] = 1
+                                    }
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
+                                task.wait(1)
+                                for num_apple, i_apple in playerData.inventory.food do
+                                    if i_apple.kind == 'apple' then
+                                        local args = {
+                                            [1] = "__Enum_PetObjectCreatorType_2",
+                                            [2] = {
+                                                ["pet_unique"] = _G.Pet,
+                                                ["unique_id"] = num_apple
+                                            }
+                                        }
+                                        
+                                        game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("PetObjectAPI/CreatePetObject"):InvokeServer(unpack(args))
+                                        break
+                                    end
+                                end
+                                task.wait(5)
+                            elseif num_pets == 'thirsty' then
+                                EquipLastPet_TeamBabies()
+                                local args = {
+                                    [1] = "food",
+                                    [2] = "water",
+                                    [3] = {
+                                        ["buy_count"] = 1
+                                    }
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
+                                task.wait(1)
+                                for num_water, i_water in playerData.inventory.food do
+                                    if i_water.kind == 'water' then
+                                        local args = {
+                                            [1] = "__Enum_PetObjectCreatorType_2",
+                                            [2] = {
+                                                ["pet_unique"] = _G.Pet,
+                                                ["unique_id"] = num_water
+                                            }
+                                        }
+                                        
+                                        game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("PetObjectAPI/CreatePetObject"):InvokeServer(unpack(args))
+                                        break
+                                    end
+                                end
+                                task.wait(5)
+                            elseif num_pets == 'pizza_party' then
+                                EquipLastPet_TeamBabies()
+                                local args = {
+                                    [1] = "PizzaShop"
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("LocationAPI/SetLocation"):FireServer(unpack(args))
+                                task.wait(30)
+                            elseif num_pets == 'salon' then
+                                local args = {
+                                    [1] = "Hospital",
+                                    [2] = game:GetService("Players").LocalPlayer
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("LocationAPI/SetLocation"):FireServer(unpack(args))
+                                task.wait(30)
+                            elseif num_pets == 'sick' then
+                                EquipLastPet_TeamBabies()
+                                local args = {
+                                    [1] = "food",
+                                    [2] = "healing_apple",
+                                    [3] = {
+                                        ["buy_count"] = 1
+                                    }
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("ShopAPI/BuyItem"):InvokeServer(unpack(args))
+                                task.wait(1)
+                                for num_Heal_apple, i_Heal_apple in playerData.inventory.food do
+                                    if i_Heal_apple.kind == 'apple' then
+                                        local args = {
+                                            [1] = "__Enum_PetObjectCreatorType_2",
+                                            [2] = {
+                                                ["pet_unique"] = _G.Pet,
+                                                ["unique_id"] = num_Heal_apple
+                                            }
+                                        }
+                                        
+                                        game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("PetObjectAPI/CreatePetObject"):InvokeServer(unpack(args))
+                                        break
+                                    end
+                                end
+                                task.wait(5)
+                            elseif num_pets == 'walk' then
+                                TeleportToPlatform()
+                                EquipLastPet_TeamBabies()
+                                task.wait(3)
+                                local RunService = game:GetService("RunService")
+                                local Character = game.Players.LocalPlayer.Character
+                                local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+
+                                local startTime = tick()
+                                local angle = 0
+
+                                local function onStepped()
+                                    if tick() - startTime < 10 then
+                                        angle = (angle + 0.05) % (2*math.pi)
+                                        local radius = 5
+                                        local x = math.cos(angle) * radius
+                                        local z = math.sin(angle) * radius
+                                        Humanoid:Move(Vector3.new(x, 0, z))
+                                    else
+                                        RunService:UnbindFromRenderStep("AutoRun")
+                                    end
+                                end
+                                RunService:BindToRenderStep("AutoRun", Enum.RenderPriority.Input.Value, onStepped)
+                            end
+                        end
+                    end
+                end
+                if num_2 == 'baby_ailments' then
+                    for num_baby, i_baby in i_2 do
+
+                    end
+                end
+            end
+        end
+    end
+end
