@@ -1,0 +1,142 @@
+local function rename(remotename,hashedremote)
+    hashedremote.Name = remotename
+end
+
+table.foreach(getupvalue(require(game:GetService("ReplicatedStorage"):WaitForChild("Fsys")).load("RouterClient").init, 7),rename)
+
+local clientData = require(game.ReplicatedStorage.ClientModules.Core.ClientData)
+local playerData = clientData.get_data()[tostring(game.Players.LocalPlayer)]
+function EquipLastPet_TeamBabies()
+    for num, i in playerData do
+        if num == 'last_equipped_pets' then
+            for num2, i2 in i do
+                _G.Pet = i2
+                local args = {
+                    [1] = i2,
+                    [2] = {
+                        ["use_sound_delay"] = false,
+                        ["equip_as_last"] = false
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("ToolAPI/Equip"):InvokeServer(unpack(args))
+                break
+            end
+        end
+        if num == 'team' then
+            if i == 'Parents' then
+                local args = {
+                    [1] = "Babies",
+                    [2] = {
+                        ["dont_send_back_home"] = true,
+                        ["source_for_logging"] = "avatar_editor"
+                    }
+                }
+                
+                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("TeamAPI/ChooseTeam"):InvokeServer(unpack(args))            
+            end
+        end
+    end
+end
+EquipLastPet_TeamBabies()
+
+local EquippedPets = workspace:WaitForChild("Pets"):GetChildren()
+for _, i in EquippedPets do
+    _G.EquippedPet = i.Name
+    print(_G.EquippedPet)
+end
+
+local HouseFurniture = workspace.HouseInteriors.furniture:GetChildren()
+for num, i in playerData do
+    if num == 'ailments_manager' then
+        for num_2, i_2 in i do
+            if num_2 == 'ailments' then
+                for num_3, i_3 in i_2 do
+                    for num_pets, i_pets in i_3 do
+                        if num_pets == 'dirty' then                          
+                            for num, i in HouseFurniture do
+                                if i:FindFirstChild('ModernShower') then
+                                    local OriginStr = i.Name
+                                    IDfurniture = string.gsub(OriginStr, game.Players.LocalPlayer.Name..'/1/nil/true/', "")
+                                end
+                            end
+                            print(IDfurniture)
+                            task.wait(1)
+                            local args = {
+                                [1] = game:GetService("Players").LocalPlayer,
+                                [2] = IDfurniture,
+                                [3] = "UseBlock",
+                                [4] = {
+                                    ["cframe"] = CFrame.new(-15961.55078125, 4002.459716796875, -8003.5517578125, 0, 0, 1, 0, 1, 0, -1, 0, 0)
+                                },
+                                [5] = _G.EquippedPet
+                            }
+                            
+                            game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/ActivateFurniture"):InvokeServer(unpack(args))
+                            task.wait(10)
+                        elseif num_pets == 'sleepy' then
+                            for num, i in HouseFurniture do
+                                if i:FindFirstChild('BasicCrib') then
+                                    local OriginStr = i.Name
+                                    IDfurniture = string.gsub(OriginStr, game.Players.LocalPlayer.Name..'/1/nil/true/', "")
+                                end
+                            end
+                            print(IDfurniture)
+                            task.wait(1)
+                            local args = {
+                                [1] = game:GetService("Players").LocalPlayer,
+                                [2] = IDfurniture,
+                                [3] = "UseBlock",
+                                [4] = {
+                                    ["cframe"] = CFrame.new(-15980.4658203125, 4000.9453125, -8030.02783203125, 0, 0, -1, 0, 1, 0, 1, 0, 0)
+                                },
+                                [5] = _G.EquippedPet
+                            }
+                            
+                            game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/ActivateFurniture"):InvokeServer(unpack(args))
+                            task.wait(20)
+                        elseif num_pets == 'play' then
+                            for i = 1, 3 do
+                                local args = {
+                                    [1] = "__Enum_PetObjectCreatorType_1",
+                                    [2] = {
+                                        ["reaction_name"] = "ThrowToyReaction",
+                                        ["unique_id"] = _G.Pet
+                                    }
+                                }
+                                
+                                game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("PetObjectAPI/CreatePetObject"):InvokeServer(unpack(args))
+                            end
+                        elseif num_pet == 'toilet' then
+                            for num, i in HouseFurniture do
+                                if i:FindFirstChild('Toilet') then
+                                    local OriginStr = i.Name
+                                    IDfurniture = string.gsub(OriginStr, game.Players.LocalPlayer.Name..'/1/nil/true/', "")
+                                end
+                            end
+                            print(IDfurniture)
+                            task.wait(1)
+                            local args = {
+                                [1] = game:GetService("Players").LocalPlayer,
+                                [2] = IDfurniture,
+                                [3] = "Seat1",
+                                [4] = {
+                                    ["cframe"] = CFrame.new(-3961.648193359375, 4003.1552734375, 3987.500244140625, 0, 0, 1, 0, 1, 0, -1, 0, 0)
+                                },
+                                [5] = _G.EquippedPet
+                            }
+                            
+                            game:GetService("ReplicatedStorage"):WaitForChild("API"):WaitForChild("HousingAPI/ActivateFurniture"):InvokeServer(unpack(args))
+                            task.wait(10)
+                        end
+                    end
+                end
+            end
+            if num_2 == 'baby_ailments' then
+                for num_baby, i_baby in i_2 do
+                    print('baby task: '..num_baby)
+                end
+            end
+        end
+    end
+end
